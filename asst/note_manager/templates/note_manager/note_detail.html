@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block page_content %}
+<div class="col-md-8 offset-md-2">
+    <!-- title/header of note -->
+    <h1>{{ note.title }}</h1>
+
+    <!-- date of comment and the categories associated with note -->
+    <small>
+        {{ note.created_on.date }} |&nbsp;
+        Categories:&nbsp;
+        {% for category in note.categories.all %}
+        <a href="{% url 'note_category' category.name %}">
+            {{ category.name }}
+        </a>&nbsp;
+        {% endfor %}
+    </small>
+
+    <!-- note body -->
+    <p>{{ note.body | linebreaks }}</p>
+
+    <!-- buttons to delete/update note -->
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'note_update' note.pk %}">Update</a>
+    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'note_delete' note.pk %}">Delete</a>
+
+    <!-- form for leaving a comment -->
+    <h3>Leave a comment:</h3>
+    <form action="/note_manager/{{ note.pk }}/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.author }}
+        </div>
+        <div class="form-group">
+            {{ form.body }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <!-- loading comments -->
+    <h3>Comments:</h3>
+    {% for comment in comments %}
+    <p>
+        On {{comment.created_on.date }}&nbsp;
+        <b>{{ comment.author }}</b> wrote:
+    </p>
+    <p>{{ comment.body }}</p>
+    <hr>
+    {% endfor %}
+</div>
+{% endblock %}
