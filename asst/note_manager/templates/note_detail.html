@@ -18,6 +18,10 @@
     <!-- note body -->
     <p>{{ note.body | linebreaks }}</p>
 
+    <!-- buttons to delete/update note -->
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'note_update' note.pk %}">Update</a>
+    <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'note_delete' note.pk %}">Delete</a>
+
     <!-- form for leaving a comment -->
     <h3>Leave a comment:</h3>
     <form action="/note_manager/{{ note.pk }}/" method="post">

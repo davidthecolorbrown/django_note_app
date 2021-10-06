@@ -10,7 +10,7 @@ from django.views.generic import (
     DeleteView
 )
 
-# 
+# homepage, displays all notes
 def note_index(request):
     notes = Note.objects.all().order_by('-created_on')
     context = {
@@ -19,7 +19,7 @@ def note_index(request):
     return render(request, "note_index.html", context)
 
 
-# 
+# displays notes by categories
 def note_category(request, category):
     notes = Note.objects.filter(
         categories__name__contains=category
@@ -32,7 +32,7 @@ def note_category(request, category):
     }
     return render(request, "note_category.html", context)
 
-# 
+# shows details of notes
 def note_detail(request, pk):
     note = Note.objects.get(pk=pk)
 
@@ -56,20 +56,23 @@ def note_detail(request, pk):
 
     return render(request, "note_detail.html", context)
 
-# 
-#def note_create(request):
-def note_create(request, pk):
-    note = Note.objects.get(pk=pk)
+# TODO: creation of a new note
+def note_create(request):
+#def note_create(request, pk):
+    #note = Note.objects.get(pk=pk)
+    note = Note.objects.all()
 
+    #form = NoteForm()
     form = CommentForm() 
     '''
+    form = CommentForm() 
+    
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = Comment(
                 author=form.cleaned_data["author"],
                 body=form.cleaned_data["body"],
-                post=post
             )
             comment.save()
     '''
@@ -77,12 +80,34 @@ def note_create(request, pk):
     #comments = Comment.objects.all()
     comments = Note.objects.all()
     context = {
+        #"title": "fucking title",
         "note": note,
-        "comments": comments,
+        #"comments": comments,
         "form": form,
     }
 
+    #return render(request, "note_create.html", context)
     return render(request, "note_create.html", context)
+
+
+# TODO: updating a note
+def note_update(request, pk):
+    notes = Note.objects.all().order_by('-created_on')
+    context = {
+        "notes": notes,
+    }
+    return render(request, "note_index.html", context)
+
+# TODO: deleting a note
+def note_delete(request, pk):
+    notes = Note.objects.all().order_by('-created_on')
+    context = {
+        "notes": notes,
+    }
+    return render(request, "note_index.html", context)
+
+
+
 
 
 # class view (same as note_index)
