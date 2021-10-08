@@ -6,6 +6,7 @@
 
     <!-- date of comment and the categories associated with note -->
     <small>
+        {{ note.author }} |&nbsp;
         {{ note.created_on.date }} |&nbsp;
         Categories:&nbsp;
         {% for category in note.categories.all %}

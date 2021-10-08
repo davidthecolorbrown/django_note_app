@@ -19,14 +19,21 @@ class Note(models.Model):
     created_on = models.DateTimeField(auto_now_add=True) # auto_now_add assigns curr data/time to this field whenever instance is created 
     last_modified = models.DateTimeField(auto_now=True) # auto_now assigns curr date/time to field whenever instance is SAVED (edits)
     categories = models.ManyToManyField('Category', related_name='notes') # link categories/notes (many-to-many) using djangos ManytoManyField type 
-    #author = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    #author = models.ForeignKey(User, on_delete=models.CASCADE, default=.get_or_create(pk=1))
+    #author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    
     # method for getting url for note
     def get_absolute_url(self):
         # reverse() returns full path as string 
         return reverse('note_detail', kwargs={'pk': self.pk}) 
 
-#
+    # method to return the author of this post object
+    #def get_author():
+        #return Note.objects.get_or_create(id=1)
+        #return Note.objects.get_or_create(pk=1)
+
+# 
 class Comment(models.Model):
     author = models.CharField(max_length=60)
     body = models.TextField()

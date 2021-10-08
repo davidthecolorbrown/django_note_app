@@ -34,7 +34,7 @@
               <li class="nav-item active">
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'note_index' %}">Note Manager</a>
+                <a class="nav-link" href="#">Note Manager</a>
               </li>
             </ul>
           </div>
@@ -51,7 +51,7 @@
               <!-- user is authenticated, show default home view for user -->
               {% if user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                <a class="nav-item nav-link" href="{% url 'note_index' %}">Home</a>
+                <a class="nav-item nav-link" href="{% url 'note_index' user.username %}">Home</a>
                 <a class="nav-item nav-link" href="{% url 'note_create' %}">Add</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               <!-- user is not logged in -->
