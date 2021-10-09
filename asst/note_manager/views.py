@@ -13,9 +13,17 @@ from django.views.generic import (
     DeleteView
 )
 
-# homepage, displays all notes
+# homepage, displays only notes authored by the user currently logged
+@login_required
 def note_index(request):
-    notes = Note.objects.all().order_by('-created_on')
+    # get and display ALL users notes at index
+    #notes = Note.objects.all().order_by('-created_on')
+
+    # get and display ONLY the logged in users notes at index
+    user = request.user # get logged in user from request
+    # return the filtered notes by author and display newest notes first 
+    notes = Note.objects.filter(author=user).order_by('-created_on')
+    # 
     context = {
         "notes": notes,
     }
@@ -86,8 +94,7 @@ class NoteListView(LoginRequiredMixin, ListView):
     context_object_name = 'notes'
     ordering = ['-created_on']
     login_url = "/admin" # redirected to this url if not logged in (instead of 404)
-    
-    # method to only return notes for logged in (authenticated) user
+    #log#
     def get_queryset(self):
         # get User object that has username equal to passed url query parameters or return 404 if user doesn't exist ('kwargs' == html query parameters)
         user = get_object_or_404(User, username=self.kwargs.get('username'))
