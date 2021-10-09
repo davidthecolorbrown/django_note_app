@@ -17,5 +17,31 @@
     </small>
     <p>{{ note.body | slice:":400" }}...</p>
     {% endfor %}
+
+    <!-- adding pageination logic -->
+    {% if is_paginated %}
+        <!-- start of pages: check if the page object has previous pages (link to first page OR the last page) -->
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <!-- middle of pages: loop through the range of pages  -->
+        {% for num in page_obj.paginator.page_range %}
+            <!-- print link to current page: check if the page object has current page, display differently -->
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            <!-- print link to prev/next set of 3 pages: if current page is within the last 3 or next 3 pages, print these as prev/next page links -->    
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        <!-- set links to next page and last page -->
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

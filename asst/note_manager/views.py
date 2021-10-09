@@ -27,15 +27,31 @@ def note_index(request):
     context = {
         "notes": notes,
     }
+
+    # create pagination for page 
+    paginate_by = 4
+
     return render(request, "note_index.html", context)
 
-# displays notes by categories
+# displays notes by categories for only the logged in user
+@login_required
 def note_category(request, category):
+    # get and display ONLY the logged in users notes at index
+    user = request.user # get logged in user from request
+    # return filtered notes by author AND category passed in request
     notes = Note.objects.filter(
-        categories__name__contains=category
-    ).order_by(
-        '-created_on'
-    )
+        categories__name__contains=category,
+        author=user
+    ).order_by('-created_on')
+
+    # return notes by category for ALL users
+    #notes = Note.objects.filter(
+    #    categories__name__contains=category
+    #).order_by(
+    #    '-created_on'
+    #)
+
+    #
     context = {
         "category": category,
         "notes": notes
@@ -43,6 +59,7 @@ def note_category(request, category):
     return render(request, "note_category.html", context)
 
 # shows details of notes
+@login_required
 def note_detail(request, pk):
     note = Note.objects.get(pk=pk)
 
@@ -95,6 +112,11 @@ class NoteListView(LoginRequiredMixin, ListView):
     ordering = ['-created_on']
     login_url = "/admin" # redirected to this url if not logged in (instead of 404)
     #log#
+
+    # create pagination for page 
+    paginate_by = 4
+
+    #
     def get_queryset(self):
         # get User object that has username equal to passed url query parameters or return 404 if user doesn't exist ('kwargs' == html query parameters)
         user = get_object_or_404(User, username=self.kwargs.get('username'))
@@ -184,7 +206,8 @@ class NoteUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 # 
 class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Note
-    success_url = '/'
+    success_url = '/note_manager'
+    #success_url = '/note_manager/user/' + note.author
 
     # check that person trying to change post is author of post
     def test_func(self):

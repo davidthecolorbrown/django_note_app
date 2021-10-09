@@ -19,9 +19,10 @@ urlpatterns = [
     #path("<int:pk>/delete/", views.note_delete, name="note_delete"),
 
     # class views 
+    #path("<str:user>", NoteListView.as_view(), name='note_index'), # class view for display ONLY notes for the logged in user 
     path('user/<str:username>', NoteListView.as_view(), name='note_index'), # class view for display ONLY notes for the logged in user 
-    path("user/<str:username>/<int:pk>", NoteDetailView.as_view(), name="note_detail"), # class view route
-    #path("<int:pk>", NoteDetailView.as_view(), name="note_detail"), # class view route
+    #path("user/<str:username>/<int:pk>", NoteDetailView.as_view(), name="note_detail"), # class view route
+    #path("<int:pk>/", NoteDetailView.as_view(), name="note_detail"), # class view route
     path("post/new/", NoteCreateView.as_view(), name="note_create"), # class view route
     path("<int:pk>/update", NoteUpdateView.as_view(), name="note_update"), # class view route
     path("<int:pk>/delete", NoteDeleteView.as_view(), name="note_delete"), # class view route
