@@ -59,4 +59,5 @@ urlpatterns = [
 
     # paths for applications
     path("note_manager/", include("note_manager.urls")),
+    
 ]

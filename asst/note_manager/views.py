@@ -12,6 +12,9 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from rest_framework import viewsets
+from .serializers import NoteSerializer
+#from .models import Hero
 
 # homepage, displays only notes authored by the user currently logged
 @login_required
@@ -217,3 +220,24 @@ class NoteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         # not original author of post, return '403 forbidden'
         return False
+
+
+
+
+
+# API views #
+
+# API endpoint for notes (GET/POST/UPDATE/DELETE)
+# URL: 
+    # collection: './note_manager/api/notes/'
+    # element: './note_manager/api/notes/<id>'
+class NoteViewSet(viewsets.ModelViewSet):
+    # query all notes and order most recently created first 
+    queryset = Note.objects.all().order_by('-created_on')
+    # serialize as json 
+    serializer_class = NoteSerializer
+
+# API endpoint for categories (GET/POST/UPDATE/DELETE)
+# URL: 
+    # collection: './note_manager/api/notes/'
+    # element: './note_manager/api/notes/<id>'
