@@ -1,5 +1,5 @@
-# what_time.py
-# returns the current time when called at command line ('python manage.py what_time')
+# db_backup.py
+# django management command
 import os
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -14,6 +14,8 @@ class Command(BaseCommand):
 
     #
     def handle(self, *args, **kwargs):
+        # use django-dbbackup module to backup database in '/var/backups/'
         management.call_command('dbbackup')
+        # get time 
         time = timezone.now().strftime('%X')
         self.stdout.write("It's now %s" % time)
