@@ -7,6 +7,10 @@ asst/db.sqlite3
 # ignore tmp and backup files
 asst/var/
 
+# ignore local file for storing "env variables" (DJANGO key, API keys, etc)
+#*/constants.py
+asst/asst/constants.py
+
 # mac files
 .DS_Store
 
