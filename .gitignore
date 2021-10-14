@@ -10,6 +10,7 @@ asst/var/
 # ignore local file for storing "env variables" (DJANGO key, API keys, etc)
 #*/constants.py
 asst/asst/constants.py
+asst/asst/cron.py
 
 # mac files
 .DS_Store
