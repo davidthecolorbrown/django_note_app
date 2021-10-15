@@ -14,27 +14,6 @@ from django.views.generic import (
 )
 from rest_framework import viewsets
 from .serializers import NoteSerializer
-#from .models import Hero
-
-# homepage, displays only notes authored by the user currently logged
-@login_required
-def note_index(request):
-    # get and display ALL users notes at index
-    #notes = Note.objects.all().order_by('-created_on')
-
-    # get and display ONLY the logged in users notes at index
-    user = request.user # get logged in user from request
-    # return the filtered notes by author and display newest notes first 
-    notes = Note.objects.filter(author=user).order_by('-created_on')
-    # 
-    context = {
-        "notes": notes,
-    }
-
-    # create pagination for page 
-    paginate_by = 4
-
-    return render(request, "note_index.html", context)
 
 # displays notes by categories for only the logged in user
 @login_required
@@ -61,51 +40,6 @@ def note_category(request, category):
     }
     return render(request, "note_category.html", context)
 
-# shows details of notes
-@login_required
-def note_detail(request, pk):
-    note = Note.objects.get(pk=pk)
-
-    form = CommentForm()
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = Comment(
-                author=form.cleaned_data["author"],
-                body=form.cleaned_data["body"],
-                note=note
-            )
-            comment.save()
-
-    comments = Comment.objects.filter(note=note)
-    context = {
-        "note": note,
-        "comments": comments,
-        "form": form,
-    }
-
-    return render(request, "note_detail.html", context)
-
-# TODO: updating a note
-def note_update(request, pk):
-    notes = Note.objects.all().order_by('-created_on')
-    context = {
-        "notes": notes,
-    }
-    return render(request, "note_index.html", context)
-
-# TODO: deleting a note
-def note_delete(request, pk):
-    notes = Note.objects.all().order_by('-created_on')
-    context = {
-        "notes": notes,
-    }
-    return render(request, "note_index.html", context)
-
-
-
-
-
 # class view (same as note_index)
 class NoteListView(LoginRequiredMixin, ListView):
 #class NoteListView(LoginRequiredMixin, UserPassesTestMixin,  ListView):
@@ -119,47 +53,62 @@ class NoteListView(LoginRequiredMixin, ListView):
     # create pagination for page 
     paginate_by = 4
 
-    #
-    def get_queryset(self):
-        # get User object that has username equal to passed url query parameters or return 404 if user doesn't exist ('kwargs' == html query parameters)
-        user = get_object_or_404(User, username=self.kwargs.get('username'))
-        # return the filtered notes by author and display newest notes first 
-        return Note.objects.filter(author=user).order_by('-created_on')
-    
-    '''
     # check that person trying to change post is author of post
     def test_func(self):
         note = self.get_object()
         # user is original author of post
         if self.request.user == note.author:
-            return True
+            #return True
+            return Note.objects.filter(author=user).order_by('-created_on')
         # not original author of post, return '403 forbidden'
         return False
-    '''
-
+    
 # class for viewing individual notes 
 class NoteDetailView(LoginRequiredMixin, DetailView):
 #class NoteDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Note
     template_name = 'note_detail.html'  # <app>/<model>_<viewtype>.html
-    #context_object_name = 'notes'
-    
-    # method to only return notes for logged in (authenticated) user
-    def get_queryset(self):
-        # get User object that has username equal to passed url query parameters or return 404 if user doesn't exist ('kwargs' == html query parameters)
-        user = get_object_or_404(User, username=self.kwargs.get('username'))
-        # return the filtered notes by author and display newest notes first 
-        return Note.objects.filter(author=user).order_by('-created_on')
-    '''
+
     # check that person trying to change post is author of post
     def test_func(self):
         note = self.get_object()
         # user is original author of post
         if self.request.user == note.author:
-            return True
+            #return True
+            return Note.objects.filter(author=user).order_by('-created_on')
         # not original author of post, return '403 forbidden'
         return False
-    '''
+
+# class view (same as note_category)
+class NoteCategoryView(LoginRequiredMixin, ListView):
+#class NoteategoryView(LoginRequiredMixin, UserPassesTestMixin,  ListView):
+    model = Note
+    template_name = 'note_category.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'notes'
+    ordering = ['-created_on']
+    login_url = "/admin" # redirected to this url if not logged in (instead of 404)
+    #log#
+
+    # create pagination for page 
+    paginate_by = 4
+
+    # check that person trying to change post is author of post
+    def test_func(self):
+        self.kwargs['category']
+        #
+        note = self.get_object()
+        # user is original author of post
+        if self.request.user == note.author:
+            #return True
+            #return Note.objects.filter(author=user).order_by('-created_on')
+            return Note.objects.filter(
+                #categories__name__contains=category,
+                #categories__name__contains=self.kwargs['category'],
+                categories=self.kwargs['category'],
+                author=user
+            )
+        # not original author of post, return '403 forbidden'
+        return False
 
 # 
 class NoteCreateView(LoginRequiredMixin, CreateView):

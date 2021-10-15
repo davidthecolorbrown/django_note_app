@@ -20,6 +20,7 @@ class Note(models.Model):
     last_modified = models.DateTimeField(auto_now=True) # auto_now assigns curr date/time to field whenever instance is SAVED (edits)
     categories = models.ManyToManyField('Category', related_name='notes') # link categories/notes (many-to-many) using djangos ManytoManyField type 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    #starred = models.Boolean() # for important notes to filter by
     #author = models.ForeignKey(User, on_delete=models.CASCADE, default=.get_or_create(pk=1))
     #author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     
