@@ -3,7 +3,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from note_manager.models import Note, Comment
-#from .forms import CommentForm, NoteForm
 from .forms import CommentForm, NoteForm
 from django.views.generic import (
     ListView,

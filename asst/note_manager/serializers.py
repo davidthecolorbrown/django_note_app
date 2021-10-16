@@ -1,6 +1,5 @@
 # serializers.py
 from rest_framework import serializers
-#from .models import Note
 from note_manager.models import Note, Category
 
 # 
