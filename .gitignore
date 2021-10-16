@@ -12,8 +12,17 @@ asst/var/
 asst/asst/constants.py
 asst/asst/cron.py
 
+# ignore documents directory
+docs/
+
+# ignore local file for storing "env variables" (DJANGO key, API keys, etc)
+**/**/constants.py
+
 # mac files
 .DS_Store
+
+# ignore bash profile with environment variables in virtual environment
+.bash_profile 
 
 # Django #
 *.log
