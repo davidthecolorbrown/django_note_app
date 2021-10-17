@@ -29,6 +29,7 @@ http://{localhost}/note_manager/note_manager/api/notes/<:id>
 
 ## Todo
 * [] Re-organize the routes.
+* [] Fix 'NoteDetails' view. The function-based version allows commenting on a post, but the class-based version does not.
 * [] Fix 'login' page to route to all user's notes formatted with pagination (currently only uses pagination when user clicks "Home" in navbar).
 * [] Encrypt backup files.
 * [] API endpoint for getting notes by date range.
