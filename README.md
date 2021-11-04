@@ -4,7 +4,7 @@
 
 ## API
 * API was created using Django RESTful framework.
-* Login as a user and use following API endpoints to brows
+* Login as a user and use following API endpoints to browse notes
 * Link to Django's Browserable API page:
 ```html
 http://{localhost}/note_manager/note_manager/api/
