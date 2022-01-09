@@ -51,6 +51,10 @@ class NoteListView(LoginRequiredMixin, ListView):
 
     # create pagination for page 
     paginate_by = 4
+    
+    # returns a list of notes for the logged in user/author 
+    def get_queryset(self):
+        return Note.objects.filter(author=self.request.user).order_by('-created_on')
 
     # check that person trying to change post is author of post
     def test_func(self):
